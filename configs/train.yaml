@@ -9,4 +9,5 @@ model:
   params: {}
   dump_path: ./model.pkl
 mlflow:
-  address: ""
+  address: "http://127.0.0.1:5000"
+  experiment: "mlops"
