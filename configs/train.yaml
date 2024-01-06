@@ -1,0 +1,12 @@
+log_level: debug
+dvc:
+  remote: storage
+  path: data/train.csv
+dataset:
+  features: ["MedInc", "HouseAge", "AveRooms", "AveBedrms", "Population", "AveOccup", "Latitude", "Longitude"]
+  target: "MedHouseVal"
+model:
+  params: {}
+  dump_path: ./model.pkl
+mlflow:
+  address: ""
