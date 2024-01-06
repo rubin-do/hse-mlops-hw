@@ -1,0 +1,12 @@
+log_level: debug
+dvc:
+  remote: storage
+  path: data/test.csv
+dataset:
+  features: ["MedInc", "HouseAge", "AveRooms", "AveBedrms", "Population", "AveOccup", "Latitude", "Longitude"]
+  target: "MedHouseVal"
+model:
+  infer_path: ./model.pkl
+  predict_path: ./predictions.csv
+mlflow:
+  address: ""
