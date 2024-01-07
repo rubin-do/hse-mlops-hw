@@ -54,3 +54,4 @@ outputs/
 
 # Pickle dumps
 *.pkl
+/data
