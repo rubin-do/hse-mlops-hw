@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mlops"
+name = "price_predictions"
 version = "0.1.0"
 description = ""
 authors = ["Daniil Rubin <danyarubin@gmail.com>"]
