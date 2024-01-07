@@ -4,9 +4,9 @@ import hydra
 import mlflow
 from omegaconf import DictConfig, OmegaConf
 
-from mlops.dvc import load_data
-from mlops.model import LGBM
-from mlops.predict import predict_path
+from price_predictions.dvc import load_data
+from price_predictions.model import LGBM
+from price_predictions.predict import predict_path
 
 
 @hydra.main(version_base=None, config_path="configs", config_name="infer")

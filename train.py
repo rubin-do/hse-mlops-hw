@@ -4,9 +4,9 @@ import hydra
 import mlflow
 from omegaconf import DictConfig, OmegaConf
 
-from mlops.dvc import load_data
-from mlops.model import LGBM
-from mlops.prepare import prepare
+from price_predictions.dvc import load_data
+from price_predictions.model import LGBM
+from price_predictions.prepare import prepare
 
 config_levels = {
     "debug": logging.DEBUG,
