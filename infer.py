@@ -1,6 +1,7 @@
 import logging
 
 import hydra
+import mlflow
 from omegaconf import DictConfig, OmegaConf
 
 from mlops.dvc import load_data
@@ -14,12 +15,14 @@ def main(cfg: DictConfig):
     log.setLevel(logging.DEBUG)
     log.debug(OmegaConf.to_yaml(cfg))
 
+    mlflow.set_tracking_uri(cfg.mlflow.address)
+
     df = load_data(cfg.dvc.path, cfg.dvc.remote)
 
-    model = LGBM(params=dict(), infer_path=cfg.model.infer_path)
+    model = LGBM.load(cfg.model.infer_path)
     pred = predict_path(model, df, cfg.dataset.features, cfg.dataset.target)
 
-    # calculate stats
+    model.calc_scores(pred[cfg.dataset.target], df[cfg.dataset.target])
 
     pred.to_csv(cfg.model.predict_path)
 

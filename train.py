@@ -1,5 +1,4 @@
 import logging
-import subprocess
 
 import hydra
 import mlflow
@@ -9,35 +8,34 @@ from mlops.dvc import load_data
 from mlops.model import LGBM
 from mlops.prepare import prepare
 
+config_levels = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL,
+}
+
 
 @hydra.main(version_base=None, config_path="configs", config_name="train")
 def main(cfg: DictConfig):
     log = logging.getLogger()
-    log.setLevel(logging.DEBUG)
+    log.setLevel(config_levels[cfg.log_level])
     log.debug(OmegaConf.to_yaml(cfg))
 
-    experiment = mlflow.set_experiment(cfg.mlflow.experiment)
+    mlflow.set_tracking_uri(cfg.mlflow.address)
 
-    mlflow.autolog()
+    experiment = mlflow.set_experiment(cfg.mlflow.experiment)
 
     df = load_data(cfg.dvc.path, cfg.dvc.remote)
     X_train, y_train = prepare(df, cfg.dataset.features, cfg.dataset.target)
 
     params = OmegaConf.to_container(cfg.model.params)
-    model = LGBM(params)
+    model = LGBM(experiment.experiment_id, params)
 
-    with mlflow.start_run(experiment_id=experiment.experiment_id):
-        mlflow.log_param("GIT_COMMIT_HASH", get_commit_hash())
-        model.fit(X_train, y_train)
-
-        log.debug(model.predict(X_train))
+    model.fit(X_train, y_train)
 
     model.dump(cfg.model.dump_path)
-
-
-def get_commit_hash():
-    s = subprocess.check_output("git rev-parse HEAD", shell=True).decode()
-    return s.strip()
 
 
 if __name__ == "__main__":

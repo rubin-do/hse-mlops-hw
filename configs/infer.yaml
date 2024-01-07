@@ -9,4 +9,4 @@ model:
   infer_path: ./model.pkl
   predict_path: ./predictions.csv
 mlflow:
-  address: ""
+  address: "http://127.0.0.1:5000"
